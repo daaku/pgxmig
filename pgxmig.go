@@ -53,7 +53,7 @@ func (s Source) Migrate(ctx context.Context, db DB) error {
 			if alreadyDone == 1 {
 				return nil
 			}
-			if _, err := tx.Exec(ctx, `insert into db_migrations values (?)`, filename); err != nil {
+			if _, err := tx.Exec(ctx, `insert into db_migrations values ($1)`, filename); err != nil {
 				return fmt.Errorf("pgxmig: error updating migration status: %q: %w", filename, err)
 			}
 			if _, err := tx.Exec(ctx, string(data)); err != nil {
