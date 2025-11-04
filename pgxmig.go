@@ -45,7 +45,7 @@ func (s Source) Migrate(ctx context.Context, db DB) error {
 			return fmt.Errorf("pgxmig: error reading migration: %q: %w", filename, err)
 		}
 		err = pgx.BeginFunc(ctx, db, func(tx pgx.Tx) error {
-			const alreadyDoneSQL = `select count(*) from db_migrations where name = ?`
+			const alreadyDoneSQL = `select count(*) from db_migrations where name = $1`
 			var alreadyDone int
 			if err := tx.QueryRow(ctx, alreadyDoneSQL, filename).Scan(&alreadyDone); err != nil {
 				return fmt.Errorf("pgxmig: error checking migration status: %q: %w", filename, err)
